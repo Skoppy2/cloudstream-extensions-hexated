@@ -103,10 +103,13 @@ override suspend fun loadLinks(
     subtitleCallback: (SubtitleFile) -> Unit,
     callback: (ExtractorLink) -> Unit
 ): Boolean {
+    
+    val urlToLoad = 
+
     app.get(
-        url = data,
+        url = urlToLoad,
         interceptor = WebViewResolver(
-            Regex("(mp4\\.urlset/master\\.m3u8\\?.*)")
+            Regex("(mp4\\.urlset/master\\.m3u8\\?.*)") // 2. Verify Regex Pattern
         )
     ).let { response ->
         M3u8Helper().m3u8Generation(
@@ -115,9 +118,9 @@ override suspend fun loadLinks(
                 headers = response.headers.toMap()
             ), true
         ).apmap { stream ->
-            // Replace backslashes with empty string in the stream URL
-            val cleanedStreamUrl = stream.streamUrl.replace("\", "")
-            
+            // 3. Handle Backslashes (if necessary):
+            val cleanedStreamUrl =
+
             callback(
                 ExtractorLink(
                     source = name,
@@ -130,8 +133,10 @@ override suspend fun loadLinks(
             )
         }
     }
+
     return true
 }
+
 
 
     private fun fetchImgUrl(imgsrc: Element?): String? {
