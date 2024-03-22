@@ -104,10 +104,10 @@ override suspend fun loadLinks(
     callback: (ExtractorLink) -> Unit
 ): Boolean {
     
-    val urlToLoad = 
+    
 
     app.get(
-        url = urlToLoad,
+        url = data,
         interceptor = WebViewResolver(
             Regex("(mp4\\.urlset/master\\.m3u8\\?.*)") // 2. Verify Regex Pattern
         )
