@@ -103,29 +103,25 @@ override suspend fun loadLinks(
     subtitleCallback: (SubtitleFile) -> Unit,
     callback: (ExtractorLink) -> Unit
 ): Boolean {
-    
-    
 
     app.get(
         url = data,
         interceptor = WebViewResolver(
-            Regex("(mp4\\.urlset/master\\.m3u8\\?.*)") 
+            Regex("(master\\.m3u8\\?.*)") 
         )
     ).let { response ->
         M3u8Helper().m3u8Generation(
             M3u8Helper.M3u8Stream(
                 response.url,
                 headers = response.headers.toMap()
-            ), true
+            ),
+            true
         ).apmap { stream ->
-        
-            val cleanedStreamUrl = stream.streamUrl.replace("\", "")
-
             callback(
                 ExtractorLink(
                     source = name,
                     name = "${this.name} m3u8",
-                    url = cleanedStreamUrl,
+                    url = stream.streamUrl, 
                     referer = mainUrl,
                     quality = getQualityFromName(stream.quality?.toString()),
                     isM3u8 = true
